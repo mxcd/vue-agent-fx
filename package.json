@@ -1,5 +1,5 @@
 {
-  "name": "libraries-dev-vue",
+  "name": "ai-ui-components-vue",
   "version": "0.1.0",
   "description": "Vue 3 port of Libraries.dev: thinking orbs, border beam, voice glow and image loader for AI & agent UIs",
   "license": "MIT",

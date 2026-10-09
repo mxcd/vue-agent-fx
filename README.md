@@ -1,27 +1,27 @@
-# libraries-dev-vue
+# ai-ui-components-vue
 
 Vue 3 port of [Libraries.dev](https://github.com/Jakubantalik/Libraries.dev) by Jakub Antalik: effects for AI & agent UIs.
 
 | Component | Import | Upstream docs (props are identical) |
 |---|---|---|
-| `ThinkingOrb` | `libraries-dev-vue/orbs` | [thinking-orbs](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/thinking-orbs) |
-| `BorderBeam` | `libraries-dev-vue/beam` | [border-beam](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/border-beam) |
-| `VoiceBeam`, `useMicrophone` | `libraries-dev-vue/voice` | [voice-glow](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/voice-glow) |
-| `ImageGeneration` | `libraries-dev-vue/image` (needs `three`) | [img-fx](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/img-fx) |
+| `ThinkingOrb` | `ai-ui-components-vue/orbs` | [thinking-orbs](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/thinking-orbs) |
+| `BorderBeam` | `ai-ui-components-vue/beam` | [border-beam](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/border-beam) |
+| `VoiceBeam`, `useMicrophone` | `ai-ui-components-vue/voice` | [voice-glow](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/voice-glow) |
+| `ImageGeneration` | `ai-ui-components-vue/image` (needs `three`) | [img-fx](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/img-fx) |
 
 [Live demo](https://mxcd.github.io/thinking-orbs/)
 
 ## Usage
 
 ```bash
-bun add github:mxcd/thinking-orbs
+bun add ai-ui-components-vue
 bun add three   # only for ImageGeneration
 ```
 
 ```vue
 <script setup lang="ts">
-import { BorderBeam, ThinkingOrb, VoiceBeam, useMicrophone } from 'libraries-dev-vue';
-import { ImageGeneration } from 'libraries-dev-vue/image';
+import { BorderBeam, ThinkingOrb, VoiceBeam, useMicrophone } from 'ai-ui-components-vue';
+import { ImageGeneration } from 'ai-ui-components-vue/image';
 
 const mic = useMicrophone({ constraints: { echoCancellation: true, noiseSuppression: true } });
 </script>
@@ -43,7 +43,7 @@ const mic = useMicrophone({ constraints: { echoCancellation: true, noiseSuppress
 </template>
 ```
 
-Ships as TypeScript/SFC source, so it needs a bundler with `@vitejs/plugin-vue` (Vite, Nuxt, Quasar). Vue >= 3.5.
+Compiled ES modules with types; `vue` >= 3.5 (and `three` for image) are peer dependencies.
 
 ## Vue differences from the React packages
 
@@ -61,6 +61,7 @@ bun install
 bun run dev        # demo
 bun run build      # demo -> dist-demo (deployed to GitHub Pages on push to main)
 bun run typecheck
+bun run build:lib  # package -> dist (runs on publish)
 ```
 
 Framework-agnostic upstream files (engines, styles, presets, drivers) are copied verbatim from Libraries.dev `bcaf88f`; only the component layer is Vue. To pull upstream changes, re-copy those files. Not ported: bot-avatars, liquid-gooey, metal-fx, and Pro/Studio content.

@@ -1,5 +1,5 @@
 // Everything except image (needs the `three` peer): import that from
-// `libraries-dev-vue/image`. Subpaths `./orbs`, `./beam`, `./voice` also exist.
+// `ai-ui-components-vue/image`. Subpaths `./orbs`, `./beam`, `./voice` also exist.
 export * from './orbs';
 export * from './beam';
 export { VoiceBeam, useMicrophone } from './voice';
