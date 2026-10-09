@@ -1,7 +1,6 @@
-export { default as ThinkingOrb } from './ThinkingOrb.vue';
-
-export type { ThinkingOrbProps, OrbState, OrbSize, OrbTheme } from './types';
-
-// Power-user surface: resolved presets + raw frame painters for your own canvas.
-export { resolvePreset, STATE_TO_MODE, type ModeKey, type Resolved } from './presets';
-export { MODE_DRAWS, MODE_FRAMES } from './engine/registry';
+// Everything except image (needs the `three` peer): import that from
+// `libraries-dev-vue/image`. Subpaths `./orbs`, `./beam`, `./voice` also exist.
+export * from './orbs';
+export * from './beam';
+export { VoiceBeam, useMicrophone } from './voice';
+export type * from './voice';

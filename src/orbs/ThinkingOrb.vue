@@ -5,10 +5,29 @@
   get a static frame that still follows the live theme.
 -->
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watchEffect } from 'vue';
-import { MODE_DRAWS } from './engine/registry';
+import { computed, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
+import { type OrbTint, paintFrame } from './engine/core';
+import { scaleCounts, scaleRadii } from './engine/profiles';
+import { MODE_FRAMES } from './engine/registry';
+import { useAutoDark } from '../shared/autoDark';
+import { attachGravity } from './gravity';
 import { resolvePreset } from './presets';
 import type { OrbState, ThinkingOrbProps } from './types';
+
+/** #rgb, #rrggbb or rgb()/rgba() → RGB triple; anything else → no tint. */
+function parseTint(color: string | undefined): OrbTint | undefined {
+  if (!color) return undefined;
+  const hex = color.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (hex) {
+    let h = hex[1];
+    if (h.length === 3) h = h.replace(/./g, (c) => c + c);
+    const n = parseInt(h, 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+  const fn = color.trim().match(/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i);
+  if (fn) return { r: Number(fn[1]), g: Number(fn[2]), b: Number(fn[3]) };
+  return undefined;
+}
 
 const LABELS: Record<OrbState, string> = {
   working: 'Working…',
@@ -27,59 +46,45 @@ const props = withDefaults(defineProps<ThinkingOrbProps>(), {
   size: 64,
   theme: 'auto',
   speed: 1,
-  paused: false
+  paused: false,
+  dots: 1,
+  dotSize: 1,
+  gravity: false
 });
 
 const canvas = ref<HTMLCanvasElement | null>(null);
-const autoDark = ref(true); // pre-mount / SSR fallback
+const autoDark = useAutoDark(() => canvas.value);
 const reduced = ref(false);
 const dark = computed(() => (props.theme === 'auto' ? autoDark.value : props.theme === 'dark'));
 
-function ancestorTheme(el: Element | null): boolean | null {
-  for (let node = el; node; node = node.parentElement) {
-    const attr = node.getAttribute('data-theme');
-    if (attr === 'dark') return true;
-    if (attr === 'light') return false;
-    if (node.classList.contains('dark')) return true;
-    if (node.classList.contains('light')) return false;
-  }
-  return null;
-}
-
-let cleanupTheme = () => {};
+let cleanupMotion = () => {};
 onMounted(() => {
-  const darkMq = matchMedia('(prefers-color-scheme: dark)');
   const motionMq = matchMedia('(prefers-reduced-motion: reduce)');
-  const resolve = () => {
-    autoDark.value = ancestorTheme(canvas.value) ?? darkMq.matches;
-  };
   const onMotion = () => {
     reduced.value = motionMq.matches;
   };
-  resolve();
   onMotion();
-  darkMq.addEventListener('change', resolve);
   motionMq.addEventListener('change', onMotion);
-  // live app-level toggles: class/data-theme flips anywhere in the tree
-  const mo = new MutationObserver(resolve);
-  mo.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class', 'data-theme'],
-    subtree: true
-  });
-  cleanupTheme = () => {
-    darkMq.removeEventListener('change', resolve);
-    motionMq.removeEventListener('change', onMotion);
-    mo.disconnect();
-  };
+  cleanupMotion = () => motionMq.removeEventListener('change', onMotion);
 });
-onBeforeUnmount(() => cleanupTheme());
+onBeforeUnmount(() => cleanupMotion());
+
+// gravity attaches the canvas to the document-level tracker; compared by
+// content so an inline options literal does not re-attach every render
+watch(
+  [canvas, () => (props.gravity ? JSON.stringify(props.gravity) : '')],
+  ([el], _old, onCleanup) => {
+    const g = props.gravity;
+    if (el && g) onCleanup(attachGravity(el, g));
+  },
+  { flush: 'post' }
+);
 
 watchEffect(
   (onCleanup) => {
     const el = canvas.value;
     if (!el) return;
-    const { state, size, speed, paused } = props;
+    const { state, size, speed, paused, color, dots, dotSize, opts: optsOverride, frame: customFrame } = props;
     const isDark = dark.value;
 
     const dpr = Math.min(2, devicePixelRatio || 1);
@@ -88,14 +93,19 @@ watchEffect(
     const ctx = el.getContext('2d');
     if (!ctx) return;
 
-    const { mode, speed: baseSpeed, opts } = resolvePreset(state, size);
-    const draw = MODE_DRAWS[mode];
+    const { mode, speed: baseSpeed, opts: presetOpts } = resolvePreset(state, size);
+    // resolvePreset caches — never mutate its result
+    let opts = dots !== 1 ? scaleCounts(presetOpts, Math.max(0.1, dots)) : presetOpts;
+    if (dotSize !== 1) opts = scaleRadii(opts, Math.max(0.1, dotSize));
+    if (optsOverride) opts = { ...opts, ...optsOverride };
+    const frameFn = customFrame ?? MODE_FRAMES[mode];
+    const tint = parseTint(color);
     const effSpeed = baseSpeed * speed;
 
     const frame = (tSec: number) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, size, size);
-      draw(ctx, size, tSec, isDark, opts);
+      paintFrame(ctx, frameFn(size, tSec, opts), isDark, tint);
     };
 
     // reduced motion → one static, deterministic frame

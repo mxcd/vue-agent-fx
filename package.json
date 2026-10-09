@@ -1,12 +1,18 @@
 {
-  "name": "thinking-orbs-vue",
+  "name": "libraries-dev-vue",
   "version": "0.1.0",
-  "description": "Vue 3 port of thinking-orbs: dotted thought-orb loading indicators for AI & agent UIs",
+  "description": "Vue 3 port of Libraries.dev: thinking orbs, border beam, voice glow and image loader for AI & agent UIs",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./orbs": "./src/orbs/index.ts",
+    "./beam": "./src/beam/index.ts",
+    "./voice": "./src/voice/index.ts",
+    "./image": "./src/image/index.ts"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -14,13 +20,21 @@
     "typecheck": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit"
   },
   "peerDependencies": {
-    "vue": "^3.5.43"
+    "vue": "^3.5.0",
+    "three": ">=0.149.0"
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/three": "^0.149.0",
     "@vitejs/plugin-vue": "^6.0.9",
+    "three": "^0.149.0",
     "typescript": "^6",
     "vite": "^8.3.4",
     "vue-tsc": "^3.3.12"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
   }
 }
