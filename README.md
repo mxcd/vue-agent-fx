@@ -1,27 +1,27 @@
-# ai-ui-components-vue
+# vue-agent-fx
 
-Vue 3 port of [Libraries.dev](https://github.com/Jakubantalik/Libraries.dev) by Jakub Antalik: effects for AI & agent UIs.
+Effects for AI & agent UIs in Vue 3: a port of [Libraries.dev](https://github.com/Jakubantalik/Libraries.dev) by Jakub Antalik.
 
 | Component | Import | Upstream docs (props are identical) |
 |---|---|---|
-| `ThinkingOrb` | `ai-ui-components-vue/orbs` | [thinking-orbs](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/thinking-orbs) |
-| `BorderBeam` | `ai-ui-components-vue/beam` | [border-beam](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/border-beam) |
-| `VoiceBeam`, `useMicrophone` | `ai-ui-components-vue/voice` | [voice-glow](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/voice-glow) |
-| `ImageGeneration` | `ai-ui-components-vue/image` (needs `three`) | [img-fx](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/img-fx) |
+| `ThinkingOrb` | `vue-agent-fx/orbs` | [thinking-orbs](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/thinking-orbs) |
+| `BorderBeam` | `vue-agent-fx/beam` | [border-beam](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/border-beam) |
+| `VoiceBeam`, `useMicrophone` | `vue-agent-fx/voice` | [voice-glow](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/voice-glow) |
+| `ImageGeneration` | `vue-agent-fx/image` (needs `three`) | [img-fx](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/img-fx) |
 
-[Live demo](https://mxcd.github.io/thinking-orbs/)
+[Live demo](https://mxcd.github.io/vue-agent-fx/)
 
 ## Usage
 
 ```bash
-bun add ai-ui-components-vue
+bun add vue-agent-fx
 bun add three   # only for ImageGeneration
 ```
 
 ```vue
 <script setup lang="ts">
-import { BorderBeam, ThinkingOrb, VoiceBeam, useMicrophone } from 'ai-ui-components-vue';
-import { ImageGeneration } from 'ai-ui-components-vue/image';
+import { BorderBeam, ThinkingOrb, VoiceBeam, useMicrophone } from 'vue-agent-fx';
+import { ImageGeneration } from 'vue-agent-fx/image';
 
 const mic = useMicrophone({ constraints: { echoCancellation: true, noiseSuppression: true } });
 </script>

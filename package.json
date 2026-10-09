@@ -1,5 +1,5 @@
 {
-  "name": "ai-ui-components-vue",
+  "name": "vue-agent-fx",
   "version": "0.1.0",
   "description": "Vue 3 port of Libraries.dev: thinking orbs, border beam, voice glow and image loader for AI & agent UIs",
   "license": "MIT",
@@ -59,9 +59,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mxcd/thinking-orbs.git"
+    "url": "git+https://github.com/mxcd/vue-agent-fx.git"
   },
-  "homepage": "https://mxcd.github.io/thinking-orbs/",
+  "homepage": "https://mxcd.github.io/vue-agent-fx/",
   "keywords": [
     "vue",
     "vue3",

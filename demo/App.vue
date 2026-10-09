@@ -14,7 +14,7 @@ watchEffect(() => document.documentElement.setAttribute('data-theme', dark.value
 <template>
   <div class="page">
     <header>
-      <span class="mono">LIBRARIES.DEV · VUE</span>
+      <span class="mono">VUE-AGENT-FX</span>
       <nav class="controls mono">
         <a href="#orbs">ORBS</a>
         <a href="#beam">BEAM</a>
@@ -32,7 +32,7 @@ watchEffect(() => document.documentElement.setAttribute('data-theme', dark.value
     <footer class="mono faint">
       Vue port of
       <a href="https://github.com/Jakubantalik/Libraries.dev">Libraries.dev</a> by Jakub Antalik ·
-      <a href="https://github.com/mxcd/thinking-orbs">source</a>
+      <a href="https://github.com/mxcd/vue-agent-fx">source</a>
     </footer>
   </div>
 </template>
