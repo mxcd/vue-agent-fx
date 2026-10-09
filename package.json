@@ -2,28 +2,53 @@
   "name": "libraries-dev-vue",
   "version": "0.1.0",
   "description": "Vue 3 port of Libraries.dev: thinking orbs, border beam, voice glow and image loader for AI & agent UIs",
+  "license": "MIT",
   "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./orbs": "./src/orbs/index.ts",
-    "./beam": "./src/beam/index.ts",
-    "./voice": "./src/voice/index.ts",
-    "./image": "./src/image/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./orbs": {
+      "types": "./dist/orbs/index.d.ts",
+      "import": "./dist/orbs/index.js"
+    },
+    "./beam": {
+      "types": "./dist/beam/index.d.ts",
+      "import": "./dist/beam/index.js"
+    },
+    "./voice": {
+      "types": "./dist/voice/index.d.ts",
+      "import": "./dist/voice/index.js"
+    },
+    "./image": {
+      "types": "./dist/image/index.d.ts",
+      "import": "./dist/image/index.js"
+    }
   },
   "files": [
-    "src"
+    "dist"
   ],
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit"
+    "typecheck": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit",
+    "build:lib": "vite build -c vite.lib.config.ts && node node_modules/vue-tsc/bin/vue-tsc.js -p tsconfig.build.json",
+    "prepublishOnly": "bun run typecheck && bun run build:lib"
   },
   "peerDependencies": {
     "vue": "^3.5.0",
     "three": ">=0.149.0"
   },
-  "license": "MIT",
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@types/three": "^0.149.0",
     "@vitejs/plugin-vue": "^6.0.9",
@@ -32,9 +57,22 @@
     "vite": "^8.3.4",
     "vue-tsc": "^3.3.12"
   },
-  "peerDependenciesMeta": {
-    "three": {
-      "optional": true
-    }
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mxcd/thinking-orbs.git"
+  },
+  "homepage": "https://mxcd.github.io/thinking-orbs/",
+  "keywords": [
+    "vue",
+    "vue3",
+    "ai",
+    "agent",
+    "loading",
+    "thinking-orbs",
+    "border-beam",
+    "voice",
+    "animation",
+    "canvas",
+    "webgl"
+  ]
 }
